@@ -1,0 +1,42 @@
+{
+    "name": "Aplikasi Data Konsumen",
+    "short_name": "Data Konsumen",
+    "description": "Aplikasi sederhana untuk mencatat data konsumen properti.",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#c6e7fa",
+    "theme_color": "#3b82f6",
+    "icons": [
+      {
+        "src": "https://placehold.co/48x48/3b82f6/ffffff?text=DC",
+        "sizes": "48x48",
+        "type": "image/png"
+      },
+      {
+        "src": "https://placehold.co/72x72/3b82f6/ffffff?text=DC",
+        "sizes": "72x72",
+        "type": "image/png"
+      },
+      {
+        "src": "https://placehold.co/96x96/3b82f6/ffffff?text=DC",
+        "sizes": "96x96",
+        "type": "image/png"
+      },
+      {
+        "src": "https://placehold.co/144x144/3b82f6/ffffff?text=DC",
+        "sizes": "144x144",
+        "type": "image/png"
+      },
+      {
+        "src": "https://placehold.co/192x192/3b82f6/ffffff?text=DC",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "https://placehold.co/512x512/3b82f6/ffffff?text=DC",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }
+  

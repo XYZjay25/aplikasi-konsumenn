@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Konsumen Bumi Surya Properti</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Link ke Web App Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <style>
+        /* Mengatur font Inter secara global */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Gradien latar belakang yang lembut */
+            background: linear-gradient(to right bottom, #a7d9f7, #c6e7fa);
+            background-attachment: fixed; /* Latar belakang tetap saat scroll */
+        }
+        /* Kustomisasi untuk pesan pop-up */
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50; /* Hijau untuk sukses */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 250px; /* Lebar minimum untuk pesan */
+            justify-content: center;
+        }
+        .message-box.show {
+            opacity: 1;
+        }
+        .message-box.error {
+            background-color: #f44336; /* Merah untuk error */
+        }
+
+        /* Gaya input saat fokus */
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3b82f6; /* Warna biru Tailwind untuk fokus */
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Ring fokus */
+        }
+        /* Gaya untuk pesan validasi input */
+        .input-error-message {
+            color: #ef4444; /* text-red-500 */
+            font-size: 0.75rem; /* text-xs */
+            margin-top: 0.25rem; /* mt-1 */
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-4">
+
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md md:max-w-lg lg:max-w-xl border border-gray-200 transform hover:scale-105 transition-transform duration-300 ease-in-out mb-8">
+        <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-8 tracking-wide">Data Konsumen</h1>
+        <p class="text-center text-gray-600 mb-8">Masukkan data konsumen Bumi Surya Properti dengan lengkap.</p>
+
+        <form id="consumerForm" class="space-y-6">
+            <!-- Tanggal Booking -->
+            <div>
+                <label for="tanggalBooking" class="block text-sm font-semibold text-gray-700 mb-1">Tanggal Booking</label>
+                <input type="date" id="tanggalBooking" name="tanggalBooking" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                <p id="tanggalBookingError" class="input-error-message hidden">Tanggal Booking wajib diisi.</p>
+            </div>
+
+            <!-- Nama Perumahan -->
+            <div>
+                <label for="namaPerumahan" class="block text-sm font-semibold text-gray-700 mb-1">Nama Perumahan</label>
+                <input type="text" id="namaPerumahan" name="namaPerumahan" placeholder="Contoh: Bumi Surya Cibiru" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                <p id="namaPerumahanError" class="input-error-message hidden">Nama Perumahan wajib diisi.</p>
+            </div>
+
+            <!-- Nama Konsumen -->
+            <div>
+                <label for="namaKonsumen" class="block text-sm font-semibold text-gray-700 mb-1">Nama Konsumen</label>
+                <input type="text" id="namaKonsumen" name="namaKonsumen" placeholder="Contoh: Wijaya Kusuma" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                <p id="namaKonsumenError" class="input-error-message hidden">Nama Konsumen wajib diisi.</p>
+            </div>
+
+            <!-- Alamat -->
+            <div>
+                <label for="alamat" class="block text-sm font-semibold text-gray-700 mb-1">Alamat</label>
+                <input type="text" id="alamat" name="alamat" placeholder="Contoh: Banjaran, Bandung" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                <p id="alamatError" class="input-error-message hidden">Alamat wajib diisi.</p>
+            </div>
+
+            <!-- Pekerjaan -->
+            <div>
+                <label for="pekerjaan" class="block text-sm font-semibold text-gray-700 mb-1">Pekerjaan</label>
+                <input type="text" id="pekerjaan" name="pekerjaan" placeholder="Contoh: Karyawan Swasta" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                <p id="pekerjaanError" class="input-error-message hidden">Pekerjaan wajib diisi.</p>
+            </div>
+
+            <!-- Gaji -->
+            <div>
+                <label for="gaji" class="block text-sm font-semibold text-gray-700 mb-1">Gaji (per bulan)</label>
+                <input type="number" id="gaji" name="gaji" placeholder="Contoh: 5000000" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                <p id="gajiError" class="input-error-message hidden">Gaji wajib diisi.</p>
+            </div>
+
+            <!-- Keterangan -->
+            <div>
+                <label for="keterangan" class="block text-sm font-semibold text-gray-700 mb-1">Keterangan</label>
+                <select id="keterangan" name="keterangan" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                    <option value="">Pilih Keterangan</option>
+                    <option value="Booking">Booking</option>
+                    <option value="Proses">Proses</option>
+                    <option value="Akad">Akad</option>
+                </select>
+                <p id="keteranganError" class="input-error-message hidden">Keterangan wajib diisi.</p>
+            </div>
+
+            <!-- Tombol Simpan -->
+            <button type="submit" id="submitBtn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-300 ease-in-out transform hover:scale-105">
+                Simpan Data
+            </button>
+        </form>
+    </div>
+
+    <!-- Bagian untuk menampilkan data yang sudah ada -->
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md md:max-w-lg lg:max-w-xl border border-gray-200 mt-8">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Data Konsumen Tersimpan</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Tanggal Booking</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Perumahan</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Konsumen</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Alamat</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pekerjaan</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Gaji</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Keterangan</th>
+                    </tr>
+                </thead>
+                <tbody id="consumerDataTableBody" class="bg-white divide-y divide-gray-200">
+                    <!-- Data akan dimuat di sini oleh JavaScript -->
+                    <tr>
+                        <td colspan="7" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">Belum ada data konsumen tersimpan.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="noDataMessage" class="hidden text-center text-gray-500 mt-4">Belum ada data konsumen tersimpan.</div>
+        
+        <!-- Tombol Download Data -->
+        <button id="downloadCsvBtn" class="mt-6 w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-bold text-white bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-300 ease-in-out transform hover:scale-105">
+            Download Data (CSV)
+        </button>
+    </div>
+
+    <!-- Message Box untuk notifikasi -->
+    <div id="messageBox" class="message-box">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span id="messageText"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('consumerForm');
+            const messageBox = document.getElementById('messageBox');
+            const messageText = document.getElementById('messageText');
+            const consumerDataTableBody = document.getElementById('consumerDataTableBody');
+            const noDataMessage = document.getElementById('noDataMessage');
+            const downloadCsvBtn = document.getElementById('downloadCsvBtn');
+            const submitBtn = document.getElementById('submitBtn'); // Ambil tombol submit
+
+            // Kunci untuk localStorage
+            const LOCAL_STORAGE_KEY = 'consumerData';
+
+            // Fungsi untuk menampilkan pesan notifikasi
+            function showMessage(message, type = 'success') {
+                messageText.textContent = message;
+                messageBox.classList.remove('success', 'error'); // Hapus kelas sebelumnya
+                messageBox.classList.remove('bg-[#4CAF50]', 'bg-[#f44336]'); // Hapus warna latar belakang sebelumnya
+                
+                if (type === 'success') {
+                    messageBox.classList.add('bg-[#4CAF50]'); // Tambahkan warna hijau untuk sukses
+                    messageBox.querySelector('svg path').setAttribute('d', 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'); // Icon sukses
+                } else if (type === 'error') {
+                    messageBox.classList.add('bg-[#f44336]'); // Tambahkan warna merah untuk error
+                    messageBox.querySelector('svg path').setAttribute('d', 'M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2A9 9 0 111 12a9 9 0 0118 0z'); // Icon error (X dalam lingkaran)
+                }
+                
+                messageBox.classList.add('show');
+
+                setTimeout(() => {
+                    messageBox.classList.remove('show');
+                }, 3000); // Pesan akan hilang setelah 3 detik
+            }
+
+            // Fungsi untuk menampilkan/menyembunyikan pesan error input
+            function showInputError(inputId, message) {
+                const errorElement = document.getElementById(inputId + 'Error');
+                if (errorElement) {
+                    errorElement.textContent = message;
+                    errorElement.classList.remove('hidden');
+                }
+            }
+
+            function hideInputError(inputId) {
+                const errorElement = document.getElementById(inputId + 'Error');
+                if (errorElement) {
+                    errorElement.classList.add('hidden');
+                }
+            }
+
+            // Fungsi untuk mengosongkan form
+            function clearForm() {
+                form.reset(); // Mengatur ulang semua input di form
+                document.getElementById('keterangan').value = ''; // Pastikan dropdown kembali ke pilihan default
+                // Sembunyikan semua pesan error setelah form dikosongkan
+                const errorMessages = document.querySelectorAll('.input-error-message');
+                errorMessages.forEach(msg => msg.classList.add('hidden'));
+            }
+
+            // Fungsi untuk memuat data konsumen dari localStorage dan menampilkannya di tabel
+            function loadConsumerData() {
+                // Ambil data dari localStorage
+                const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                let consumerData = [];
+                if (storedData) {
+                    try {
+                        consumerData = JSON.parse(storedData);
+                    } catch (e) {
+                        console.error("Error parsing data from localStorage:", e);
+                        localStorage.removeItem(LOCAL_STORAGE_KEY); // Hapus data yang rusak
+                        showMessage("Data lokal rusak, telah direset.", "error");
+                    }
+                }
+
+                consumerDataTableBody.innerHTML = ''; // Kosongkan tabel sebelum mengisi
+
+                if (consumerData.length === 0) {
+                    noDataMessage.classList.remove('hidden');
+                } else {
+                    noDataMessage.classList.add('hidden');
+                    consumerData.forEach(consumer => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${consumer.tanggalBooking || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${consumer.namaPerumahan || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${consumer.namaKonsumen || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${consumer.alamat || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${consumer.pekerjaan || '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${consumer.gaji ? consumer.gaji.toLocaleString('id-ID') : '-'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${consumer.keterangan || '-'}</td>
+                        `;
+                        consumerDataTableBody.appendChild(row);
+                    });
+                }
+            }
+
+            // Fungsi untuk mengunduh data sebagai file CSV
+            function downloadCsv() {
+                const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                let consumerData = [];
+                if (storedData) {
+                    try {
+                        consumerData = JSON.parse(storedData);
+                    } catch (e) {
+                        console.error("Error parsing data for CSV download:", e);
+                        showMessage("Gagal mengunduh: data lokal rusak.", "error");
+                        return;
+                    }
+                }
+
+                if (consumerData.length === 0) {
+                    showMessage("Tidak ada data untuk diunduh.", "error");
+                    return;
+                }
+
+                const headers = [
+                    "Tanggal Booking", "Nama Perumahan", "Nama Konsumen", "Alamat",
+                    "Pekerjaan", "Gaji", "Keterangan"
+                ];
+
+                // Konversi data ke format CSV
+                let csvContent = headers.join(',') + '\n'; // Tambahkan header
+                consumerData.forEach(row => {
+                    const values = [
+                        row.tanggalBooking,
+                        row.namaPerumahan,
+                        row.namaKonsumen,
+                        row.alamat,
+                        row.pekerjaan,
+                        row.gaji,
+                        row.keterangan
+                    ].map(value => {
+                        // Pastikan nilai string diapit tanda kutip jika mengandung koma atau baris baru
+                        if (typeof value === 'string' && (value.includes(',') || value.includes('\n') || value.includes('"'))) {
+                            return `"${value.replace(/"/g, '""')}"`; // Escaping double quotes
+                        }
+                        return value;
+                    });
+                    csvContent += values.join(',') + '\n';
+                });
+
+                // Buat Blob dari konten CSV
+                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+
+                // Buat elemen link dan picu unduhan
+                const link = document.createElement('a');
+                link.setAttribute('href', url);
+                link.setAttribute('download', 'data_konsumen.csv');
+                link.style.visibility = 'hidden'; // Sembunyikan link
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link); // Hapus link setelah diunduh
+                URL.revokeObjectURL(url); // Bebaskan URL objek
+
+                showMessage("Data berhasil diunduh sebagai CSV!", "success");
+            }
+
+            // Event listener untuk submit form
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Mencegah form untuk refresh halaman
+
+                // Sembunyikan semua pesan error sebelumnya
+                const errorMessages = document.querySelectorAll('.input-error-message');
+                errorMessages.forEach(msg => msg.classList.add('hidden'));
+
+                // Mengambil nilai dari setiap input
+                const tanggalBooking = document.getElementById('tanggalBooking').value;
+                const namaPerumahan = document.getElementById('namaPerumahan').value;
+                const namaKonsumen = document.getElementById('namaKonsumen').value;
+                const alamat = document.getElementById('alamat').value;
+                const pekerjaan = document.getElementById('pekerjaan').value;
+                const gaji = document.getElementById('gaji').value;
+                const keterangan = document.getElementById('keterangan').value;
+
+                let isValid = true;
+
+                // Validasi: pastikan semua kolom terisi
+                if (!tanggalBooking) { showInputError('tanggalBooking', 'Tanggal Booking wajib diisi.'); isValid = false; }
+                if (!namaPerumahan) { showInputError('namaPerumahan', 'Nama Perumahan wajib diisi.'); isValid = false; }
+                if (!namaKonsumen) { showInputError('namaKonsumen', 'Nama Konsumen wajib diisi.'); isValid = false; }
+                if (!alamat) { showInputError('alamat', 'Alamat wajib diisi.'); isValid = false; }
+                if (!pekerjaan) { showInputError('pekerjaan', 'Pekerjaan wajib diisi.'); isValid = false; }
+                if (!gaji) { showInputError('gaji', 'Gaji wajib diisi.'); isValid = false; }
+                if (!keterangan) { showInputError('keterangan', 'Keterangan wajib diisi.'); isValid = false; }
+
+                if (!isValid) {
+                    showMessage('Mohon isi semua kolom yang wajib diisi.', 'error');
+                    return;
+                }
+
+                // Tampilkan loading state
+                submitBtn.textContent = 'Menyimpan...';
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
+
+                // Membuat objek data konsumen
+                const consumerDataEntry = {
+                    tanggalBooking,
+                    namaPerumahan,
+                    namaKonsumen,
+                    alamat,
+                    pekerjaan,
+                    gaji: parseFloat(gaji), // Mengubah gaji menjadi angka
+                    keterangan
+                };
+
+                // Ambil data yang sudah ada dari localStorage
+                const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                let allConsumerData = [];
+                if (storedData) {
+                    try {
+                        allConsumerData = JSON.parse(storedData);
+                    } catch (e) {
+                        console.error("Error parsing existing data from localStorage:", e);
+                        localStorage.removeItem(LOCAL_STORAGE_KEY);
+                        showMessage("Data lokal rusak, telah direset.", "error");
+                    }
+                }
+
+                // Tambahkan data baru
+                allConsumerData.push(consumerDataEntry);
+
+                // Simpan kembali ke localStorage
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allConsumerData));
+
+                showMessage('Data konsumen berhasil disimpan!', 'success');
+
+                // Reset loading state
+                submitBtn.textContent = 'Simpan Data';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+
+                // Mengosongkan form setelah data disimpan
+                clearForm();
+                // Muat ulang data di tabel setelah data baru disimpan
+                loadConsumerData();
+            });
+
+            // Event listener untuk tombol download CSV
+            downloadCsvBtn.addEventListener('click', downloadCsv);
+
+            // Muat data saat halaman pertama kali dimuat
+            loadConsumerData();
+
+            // PWA: Daftarkan Service Worker
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then((reg) => {
+                            console.log('Service Worker terdaftar dengan scope:', reg.scope);
+                        })
+                        .catch((err) => {
+                            console.error('Pendaftaran Service Worker gagal:', err);
+                        });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
